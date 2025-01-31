@@ -1,20 +1,22 @@
 from istorage import IStorage
 import json
+
+
 class StorageJson(IStorage):
   def __init__(self, file_path):
     self.__file_path = file_path
-    self.data = self.__get_movie()
-    self.movie_list = self.__json_to_list()
+    self._movies = self._get_movie()
+    self._movie_list = self.__json_to_list()
     print(f"class '{self}' wurd erstellt")
 
 
   def _get_movie(self):
     """gets movie datas"""
     with open(self.__file_path, 'r') as json_file:
-      data = json.load(json_file)
+      movies = json.load(json_file)
 
 
-    return data
+    return movies
 
 
   def __json_to_list(self):
@@ -27,7 +29,7 @@ class StorageJson(IStorage):
     """
     movie_list = []
 
-    for index, dictionary in enumerate(self.data):
+    for index, dictionary in enumerate(self._movies):
       movie_f_string = ""
 
       for key, value in dictionary.items():
@@ -36,29 +38,59 @@ class StorageJson(IStorage):
 
       movie_list.append(movie_f_string)
 
-      return movie_list
+    return movie_list
 
-  def list_movies():
-      for index, value in enumerate(self.movie_list):
+
+  def list_movies(self):
+      for index, value in enumerate(self._movie_list):
         print(value, end=None)
-
-
 
 
   def add_movie(self, title, year, rating, poster):
     """Adds a movie to the storage"""
-    pass
+    # ist poster richtig hier eingefügt?
+    new_movie = {"name": title, "year": year, "rating": rating, "poster": poster}
+    self._movies.append(new_movie)
+
+    self._save_movies()
+
 
   def delete_movie(self, title):
-    """removes a moive from the storage"""
-    pass
+    """removes a moive, by given title, from the storage"""
+    try:
+
+      title_index = None
+
+      for index, value in enumerate(self._movies):
+
+        if value["name"] == title:
+          title_index = index
+
+      del self._movies[title_index]
+
+      self._save_movies()
+
+    except TypeError as e:
+      print(e)
+
+
+
+
 
   def update_movie(self, title, rating):
     """pudates the datas of a movie"""
     pass
 
 
+  def _save_movies(self):
+    with open(self.__file_path, "w") as json_file:
+      json.dump(self._movies, json_file, indent=4)
+
+
+
+
 if __name__ == "__main__":
   file_path = "../programm_storage/movies.json"
   storage = StorageJson(file_path)
   storage.list_movies()
+  storage.delete_movie("dreiaffen")

@@ -31,6 +31,12 @@ class IStorage(ABC):
         pass
 
 
+    @abstractmethod
+    def _save_movies(self):
+      """Saves the movie data to storage"""
+
+      pass
+
 
 
 
