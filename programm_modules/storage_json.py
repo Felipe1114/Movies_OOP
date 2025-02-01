@@ -1,10 +1,7 @@
-from jinja2.lexer import TOKEN_DOT
-
-from istorage import IStorage
+from programm_modules import istorage
 import json
 
-
-class StorageJson(IStorage):
+class StorageJson(istorage.IStorage):
   def __init__(self, file_path):
     try:
       self.__file_path = file_path
@@ -51,6 +48,8 @@ class StorageJson(IStorage):
 
 
   def list_movies(self):
+      self._movie_list = self.__json_to_list()
+
       for index, value in enumerate(self._movie_list):
         print(value, end=None)
 
@@ -58,6 +57,8 @@ class StorageJson(IStorage):
   def add_movie(self, title, year, rating, poster):
     """Adds a movie to the storage"""
     # ist poster richtig hier eingefügt?
+    self._movies = self._get_movie()
+
     new_movie = {"name": title, "year": year, "rating": rating, "poster": poster}
     self._movies.append(new_movie)
 
@@ -65,13 +66,14 @@ class StorageJson(IStorage):
 
     # added movie, is the last item in list
     last_item_index = -1
-    print(f"Added new Movie: {self.__print_movie_data(last_item_index)})
+    print(f"Added new Movie: {self.__print_movie_data(last_item_index)}")
     # TODO exceptions einfügen
 
 
   def delete_movie(self, title):
     """removes a moive, by given title, from the storage"""
     try:
+      self._movies = self._get_movie()
 
       title_index = self._find_movie_index(title)
 
@@ -87,6 +89,8 @@ class StorageJson(IStorage):
 
   def _find_movie_index(self, title):
     """Finds the index of the movie dict, by its title"""
+    self._movies = self._get_movie()
+
     title_index = None
 
     for index, value in enumerate(self._movies):
@@ -103,6 +107,7 @@ class StorageJson(IStorage):
   def update_movie(self, title, rating):
     """pudates the datas of a movie"""
     try:
+      self._movies = self._get_movie()
 
       title_index = self._find_movie_index(title)
 
@@ -123,14 +128,18 @@ class StorageJson(IStorage):
 
   def _write_file(self):
     """Writes an empty Json file"""
-    with open(file_path, "w") as json_file:
+    with open(self.__file_path, "w") as json_file:
       json.dump([], json_file, indent=4)
+
+    print(f"New file added to Storage: {self.__file_path}")
 
 
   def __print_movie_data(self, movie_index):
     """returns an f"string" with the datas of a specific movie"""
+    self._movies = self._get_movie()
+
     movie_dict = self._movies[movie_index]
-    title = movie_dict["title"]
+    title = movie_dict["name"]
     rating = movie_dict['rating']
     year = movie_dict['year']
 
