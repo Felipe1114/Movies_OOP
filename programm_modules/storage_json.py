@@ -1,3 +1,5 @@
+from jinja2.lexer import TOKEN_DOT
+
 from istorage import IStorage
 import json
 
@@ -5,7 +7,7 @@ import json
 class StorageJson(IStorage):
   def __init__(self, file_path):
     self.__file_path = file_path
-    self._movies = self._get_movie()
+    self._movies = self._get_movie() # ist das richtig? oder muss ich das immer wieder aufrufen?
     self._movie_list = self.__json_to_list()
     print(f"class '{self}' wurd erstellt")
 
@@ -14,7 +16,6 @@ class StorageJson(IStorage):
     """gets movie datas"""
     with open(self.__file_path, 'r') as json_file:
       movies = json.load(json_file)
-
 
     return movies
 
@@ -53,33 +54,54 @@ class StorageJson(IStorage):
     self._movies.append(new_movie)
 
     self._save_movies()
+    # TODO print() eifügen, der sagt, was passiert ist
+    # TODO exceptions einfügen
 
 
   def delete_movie(self, title):
     """removes a moive, by given title, from the storage"""
     try:
 
-      title_index = None
-
-      for index, value in enumerate(self._movies):
-
-        if value["name"] == title:
-          title_index = index
+      title_index = self._find_movie_index(title)
 
       del self._movies[title_index]
 
       self._save_movies()
+     #TODO print() eifügen, der sagt, was passiert ist
 
     except TypeError as e:
       print(e)
 
 
+  def _find_movie_index(self, title):
+    """Finds the index of the movie dict, by its title"""
+    title_index = None
 
+    for index, value in enumerate(self._movies):
+
+      if value["name"] == title:
+        title_index = index
+
+    if isinstance(title_index, type(None)):
+      raise TypeError("list indices must be integers or slices, not NoneType")
+
+    return title_index
 
 
   def update_movie(self, title, rating):
     """pudates the datas of a movie"""
-    pass
+    try:
+
+      title_index = self._find_movie_index(title)
+
+      self._movies[title_index]['rating'] = rating
+
+      self._save_movies()
+
+     #TODO print() eifügen, der sagt, was passiert ist
+
+    except TypeError as e:
+      print(e)
 
 
   def _save_movies(self):

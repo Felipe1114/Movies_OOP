@@ -25,6 +25,7 @@ class IStorage(ABC):
         """removes a moive from the storage"""
         pass
 
+
     @abstractmethod
     def update_movie(self, title, rating):
         """pudates the datas of a movie"""
@@ -38,6 +39,9 @@ class IStorage(ABC):
       pass
 
 
+    @abstractmethod
+    def _find_movie_index(self, title):
+        pass
 
 
 
