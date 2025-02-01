@@ -6,10 +6,18 @@ import json
 
 class StorageJson(IStorage):
   def __init__(self, file_path):
-    self.__file_path = file_path
-    self._movies = self._get_movie() # ist das richtig? oder muss ich das immer wieder aufrufen?
-    self._movie_list = self.__json_to_list()
-    print(f"class '{self}' wurd erstellt")
+    try:
+      self.__file_path = file_path
+      self._movies = self._get_movie() # ist das richtig? oder muss ich das immer wieder aufrufen?
+      self._movie_list = self.__json_to_list()
+      print(f"class '{self}' wurd erstellt")
+
+
+    except FileNotFoundError:
+      self._write_file()
+
+
+
 
 
   def _get_movie(self):
@@ -54,7 +62,10 @@ class StorageJson(IStorage):
     self._movies.append(new_movie)
 
     self._save_movies()
-    # TODO print() eifügen, der sagt, was passiert ist
+
+    # added movie, is the last item in list
+    last_item_index = -1
+    print(f"Added new Movie: {self.__print_movie_data(last_item_index)})
     # TODO exceptions einfügen
 
 
@@ -67,7 +78,8 @@ class StorageJson(IStorage):
       del self._movies[title_index]
 
       self._save_movies()
-     #TODO print() eifügen, der sagt, was passiert ist
+
+      print(f"Deleted movie: {title}")
 
     except TypeError as e:
       print(e)
@@ -98,7 +110,7 @@ class StorageJson(IStorage):
 
       self._save_movies()
 
-     #TODO print() eifügen, der sagt, was passiert ist
+      print(f"Updated Movie: {title}, new rating is: {rating}")
 
     except TypeError as e:
       print(e)
@@ -108,6 +120,21 @@ class StorageJson(IStorage):
     with open(self.__file_path, "w") as json_file:
       json.dump(self._movies, json_file, indent=4)
 
+
+  def _write_file(self):
+    """Writes an empty Json file"""
+    with open(file_path, "w") as json_file:
+      json.dump([], json_file, indent=4)
+
+
+  def __print_movie_data(self, movie_index):
+    """returns an f"string" with the datas of a specific movie"""
+    movie_dict = self._movies[movie_index]
+    title = movie_dict["title"]
+    rating = movie_dict['rating']
+    year = movie_dict['year']
+
+    return f"title:{title}, year: {year}, rating: {rating}"
 
 
 

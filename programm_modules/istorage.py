@@ -44,6 +44,10 @@ class IStorage(ABC):
         pass
 
 
+    @abstractmethod
+    def _write_file(self):
+        pass
+
 
 
 
