@@ -50,8 +50,7 @@ class StorageJson(istorage.IStorage):
   def list_movies(self):
       self._movie_list = self.__json_to_list()
 
-      for index, value in enumerate(self._movie_list):
-        print(value, end=None)
+      return self._movie_list
 
 
   def add_movie(self, title, year, rating, poster):
