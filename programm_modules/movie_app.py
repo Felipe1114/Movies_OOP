@@ -11,13 +11,14 @@ import random
 class MovieApp:
   def __init__(self, storage):
     self._storage = storage
+    # TODO kriegen wir aus self._storage -> delete!!!
+    """ 
     self.__key_for_rating = 'rating'
     self.__key_for_name = 'name'
     self.__key_for_year = 'year'
+    """
 
-    # methoden müssen noch refactorisiert werden
-
-    # TODO alle weiteren funktionen einfügen!!!
+    # TODO ordnen!!!
     self._operations = {
     0: exit,  # ("bye")
     1: self.list_up_movies,  # (movies),
@@ -37,7 +38,7 @@ class MovieApp:
 
   def _command_list_movies(self) -> None:
     '''Gets movie list from self.storage; displays all movies'''
-    movies_list = self._storage.get_movie_data()
+    movies_list = self._storage.get_movie_list()
 
 
     for index, value in enumerate(movies_list):
@@ -347,6 +348,19 @@ class MovieApp:
 
       self.continue_with_programm()
 
+
+  def _print_single_movie(self, movie:dict) -> None:
+    """prints a single movie, out of a dict"""
+    print(f"{movie[self._storage.__key_for_name]}"
+          f"({movie[self._storage.__key_for_year]}): "
+          f"{movie[self._storage.__key_for_rating]}")
+
+
+  def print_movies(self, movie_list: list) -> None:
+    """"""
+    for index, movie in enumerate(movie_list):
+      print(index + 1, end='. ')
+      self._print_single_movie(movie)
 
 
     # Print menu

@@ -162,6 +162,9 @@ class StorageJson(istorage.IStorage):
     return text
 
 
+
+
+
 if __name__ == "__main__":
   file_path = "../programm_storage/movies.json"
   storage = StorageJson(file_path)
