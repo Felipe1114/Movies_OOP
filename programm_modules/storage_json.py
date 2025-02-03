@@ -5,7 +5,7 @@ class StorageJson(istorage.IStorage):
   def __init__(self, file_path):
     try:
       self.__file_path = file_path
-      self._movies = self._get_movie() # ist das richtig? oder muss ich das immer wieder aufrufen?
+      self._movies = self.get_movie_data() # ist das richtig? oder muss ich das immer wieder aufrufen?
       self._movie_list = self.__json_to_list()
       print(f"class '{self}' wurd erstellt")
 
@@ -14,15 +14,18 @@ class StorageJson(istorage.IStorage):
       self._write_file()
 
 
-
-
-
-  def _get_movie(self):
+  def get_movie_data(self):
     """gets movie datas"""
     with open(self.__file_path, 'r') as json_file:
       movies = json.load(json_file)
 
     return movies
+
+
+  def get_movie_list(self):
+      self._movie_list = self.__json_to_list()
+
+      return self._movie_list
 
 
   def __json_to_list(self):
@@ -47,16 +50,13 @@ class StorageJson(istorage.IStorage):
     return movie_list
 
 
-  def list_movies(self):
-      self._movie_list = self.__json_to_list()
 
-      return self._movie_list
 
 
   def add_movie(self, title, year, rating, poster):
     """Adds a movie to the storage"""
     # ist poster richtig hier eingefügt?
-    self._movies = self._get_movie()
+    self._movies = self.get_movie_data()
 
     new_movie = {"name": title, "year": year, "rating": rating, "poster": poster}
     self._movies.append(new_movie)
@@ -72,7 +72,7 @@ class StorageJson(istorage.IStorage):
   def delete_movie(self, title):
     """removes a moive, by given title, from the storage"""
     try:
-      self._movies = self._get_movie()
+      self._movies = self.get_movie_data()
 
       title_index = self._find_movie_index(title)
 
@@ -88,7 +88,7 @@ class StorageJson(istorage.IStorage):
 
   def _find_movie_index(self, title):
     """Finds the index of the movie dict, by its title"""
-    self._movies = self._get_movie()
+    self._movies = self.get_movie_data()
 
     title_index = None
 
@@ -106,7 +106,7 @@ class StorageJson(istorage.IStorage):
   def update_movie(self, title, rating):
     """pudates the datas of a movie"""
     try:
-      self._movies = self._get_movie()
+      self._movies = self.get_movie_data()
 
       title_index = self._find_movie_index(title)
 
@@ -135,7 +135,7 @@ class StorageJson(istorage.IStorage):
 
   def __print_movie_data(self, movie_index):
     """returns an f"string" with the datas of a specific movie"""
-    self._movies = self._get_movie()
+    self._movies = self.get_movie_data()
 
     movie_dict = self._movies[movie_index]
     title = movie_dict["name"]

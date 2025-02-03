@@ -40,18 +40,7 @@ def display_single_movie(movie:dict):
   return f"{movie[KFN]}({movie[KFY]}): {movie[KFR]}"
 
 
-def list_up_movies(list):
-  """prints a list of movies
 
-    Args:
-      list(list): a given list of dictionaries with movie informations
-  """
-
-  text = ""
-  for movie in list:
-    text = text + f"{movie[KFN]}({movie[KFY]}): {movie[KFR]}" + "\n" # print engine einbauen
-
-  return text
 
 
 def sort_movies(movies, key):
@@ -114,21 +103,6 @@ def get_average(movies):
   return average
 
 
-def sort_list_by_rating(movies):
-  """sorts the list(movies) by its ratings in the dicionaries
-
-  :param movies: a list of dictionaries with movie informations
-  :return: a list of dictionaries, sorted by its values of the keys[ratings]
-  """
-  sorted_list = sort_movies(movies, KFR)
-  rating_list = []
-
-  for dict in sorted_list:
-    rating_list.append(dict[KFR])
-
-  return rating_list
-
-
 def get_median(movies):
   """calculates the median from all ratings(values) of movies(dict)
 
@@ -187,6 +161,20 @@ def get_worst_movies(movies):
   return worst_movies
 
 
+def list_up_movies(list):
+  """prints a list of movies
+
+    Args:
+      list(list): a given list of dictionaries with movie informations
+  """
+
+  text = ""
+  for movie in list:
+    text = text + f"{movie[KFN]}({movie[KFY]}): {movie[KFR]}" + "\n" # print engine einbauen
+
+  return text
+
+
 def print_movies_sorted_by_rating(movies):
   """prints movies, sorted by rating (high to low)
 
@@ -195,6 +183,21 @@ def print_movies_sorted_by_rating(movies):
   sorted_movies = sort_movies(movies, KFR)
 
   return list_up_movies(sorted_movies)
+
+def sort_list_by_rating(movies):
+  """sorts the list(movies) by its ratings in the dicionaries
+
+  :param movies: a list of dictionaries with movie informations
+  :return: a list of dictionaries, sorted by its values of the keys[ratings]
+  """
+  sorted_list = sort_movies(movies, KFR)
+  rating_list = []
+
+  for dict in sorted_list:
+    rating_list.append(dict[KFR])
+
+  return rating_list
+
 
 
 def print_movies_sorted_by_year(movies):

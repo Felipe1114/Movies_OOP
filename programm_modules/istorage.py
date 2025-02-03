@@ -3,12 +3,12 @@ from abc import ABC, abstractmethod
 
 class IStorage(ABC):
     @abstractmethod
-    def _get_movie(self):
+    def get_movie_data(self):
         """gets movie datas"""
         pass
 
     @abstractmethod
-    def list_movies(self):
+    def get_movie_list(self):
         """returns a list with movie-f-strings
 
         :return: movie_list
