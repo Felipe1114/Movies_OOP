@@ -35,13 +35,12 @@ class MovieApp:
 
 
 
-  def list_up_movies(self, sort_type: str=None) -> str:
-    '''returns a sortet list of movies, depending on 'sort_type: best/worst'''
+  def list_up_movies(self, sort_type: str=None) -> None:
+    '''returns a sortet list of movies, depending on 'sort_type: best/worst, if existent'''
     if sort_type is None:
       movies_list = self._storage.get_movie_list()
 
       self._print_movies(movies_list)
-
 
     elif sort_type == 'best':
       # get best movie will ich aus storage bekommen
@@ -83,12 +82,6 @@ class MovieApp:
       self._print_single_movie(movie)
 
 
-
-
-
-
-
-
   def _get_movie_stats(self) -> str:
     '''Calculates and diyplays average rating, median rating, best and worst movie rating'''
     average = self._storage._get_average()
@@ -109,12 +102,6 @@ class MovieApp:
 
 
     return text
-
-
-
-
-
-
 
 
 

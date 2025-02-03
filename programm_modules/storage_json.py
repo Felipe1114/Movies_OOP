@@ -134,9 +134,9 @@ class StorageJson(istorage.IStorage):
     self._movies = self.get_movie_data()
 
     movie_dict = self._movies[movie_index]
-    title = movie_dict[self.__key_for_name]
-    rating = movie_dict[self.__key_for_rating]
-    year = movie_dict[self.__key_for_year]
+    title = movie_dict[self.key_for_name]
+    rating = movie_dict[self.key_for_rating]
+    year = movie_dict[self.key_for_year]
 
     return f"title:{title}, year: {year}, rating: {rating}"
 
@@ -147,7 +147,7 @@ class StorageJson(istorage.IStorage):
     movies = self.get_movie_data()
 
     for i, dictionary in enumerate(movies):
-      if dictionary[self.__key_for_name].lower() == searched_name.lower():
+      if dictionary[self.key_for_name].lower() == searched_name.lower():
         return movies[i]
 
     raise ValueError("Given name not in movie-list. Please give an existing name")
@@ -182,11 +182,11 @@ class StorageJson(istorage.IStorage):
 
   def sort_list_by_rating(self) -> list:
     '''sorts the list(movies) by its ratings in the dicionaries'''
-    sorted_list = self.sort_movies(self.__key_for_rating)
+    sorted_list = self.sort_movies(self.key_for_rating)
     rating_list = []
 
     for dict in sorted_list:
-      rating_list.append(dict[self.__key_for_rating])
+      rating_list.append(dict[self.key_for_rating])
 
     return rating_list
 
@@ -219,19 +219,6 @@ class StorageJson(istorage.IStorage):
 
 
 
-
-
-
-  def _get_worst_movies(self) -> list:
-    '''gets the worst movie(s) - by rating - in the list (movies)'''
-    sorted_movie_list = self._storage.sort_movies(self._storage.___storage.key_for_rating)
-
-
-    sml = sorted_movie_list
-
-
-
-    return worst_movies
 
 
 
