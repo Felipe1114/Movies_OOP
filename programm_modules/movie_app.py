@@ -26,9 +26,9 @@ class MovieApp:
     4: self._storage.update_movie, #(title, rating)
     5: self._command_movie_stats,
     6: self.print_random_movie,
-    7: self.search_movie,  # (movies),
-    8: self.print_movies_sorted_by_rating,  # (movies)
-    9: self.print_movies_sorted_by_year,  # (movies)
+    7: self.search_movie,  # (movie_name),
+    8: self.sort_movies_by_rating,  # no print
+    9: self.sort_movies_by_year,  # no pirnt)
     10: self.filter_movies  # (movies)
   }
 
@@ -121,15 +121,11 @@ class MovieApp:
 
   def _get_best_movies(self) -> list:
     '''gets the best movie(s) - by rating - in the list (movies)'''
-    movie_list = self._storage.get_movie_list()
-
-    sorted_movie_list = self._sort_movies(movie_list, self.__key_for_rating)
-
+    sorted_movie_list = self._sort_movies(self.__key_for_rating)
 
     sml = sorted_movie_list
     best_rating = sml[0][self.__key_for_rating]
     best_movies = []
-
 
     for i in range(len(sml)):
       if sml[i][self.__key_for_rating] == best_rating:
@@ -141,9 +137,9 @@ class MovieApp:
 
 
 
-  def _get_worst_movies(self, movies: list) -> list:
+  def _get_worst_movies(self) -> list:
     '''gets the worst movie(s) - by rating - in the list (movies)'''
-    sorted_movie_list = self._sort_movies(movies, self.__key_for_rating)
+    sorted_movie_list = self._sort_movies(self.__key_for_rating)
 
 
     sml = sorted_movie_list
@@ -163,9 +159,6 @@ class MovieApp:
 
   def list_up_movies(self, sort_type: str) -> str:
     '''returns a sortet list of movies, depending on 'sort_type: best/worst'''
-    movie_list = self._storage.get_movie_list()
-
-
     if sort_type == 'best':
       best_movies = self._get_best_movies()
 
@@ -177,7 +170,7 @@ class MovieApp:
 
 
     elif sort_type == 'worst':
-      worst_movies = self._get_worst_movies(movie_list)
+      worst_movies = self._get_worst_movies()
 
       text = ''
       for movie in worst_movies:
@@ -190,10 +183,7 @@ class MovieApp:
 
   def _sort_list_by_rating(self) -> list:
     '''sorts the list(movies) by its ratings in the dicionaries'''
-    movie_list = self._storage.get_movie_data()
-
-
-    sorted_list = self._sort_movies(movie_list, self.__key_for_rating)
+    sorted_list = self._sort_movies(self.__key_for_rating)
     rating_list = []
 
 
@@ -206,10 +196,10 @@ class MovieApp:
 
 
 
-  def _sort_movies(self, movies: list, key: str) -> list:
-    '''Sorts the List(movies) by rating, year or name'''
+  def _sort_movies(self, key: str) -> list:
+    '''Sorts the List(movies) by rating, key is year or name'''
+    movies = self._storage.get_movie_data()
     sorted_movies = sorted(movies, key=lambda dict: dict[key], reverse=True)
-
 
     return sorted_movies
 
@@ -314,7 +304,35 @@ class MovieApp:
     return user_input
 
 
+  def search_movie(self):
+    """The user gives an input(movie name), than the funktion prints the movie,
+    with its release year and ranking"""
+    while True:
 
+      try:
+        searched_name = input("Wich movie are you searching for?: ")
+        searched_movie = self._storage.find_dict_by_name(searched_name)
+        return f'{searched_movie[self.__key_for_name]}({searched_movie[self.__key_for_year]}): {searched_movie[self.__key_for_rating]}'
+
+      except ValueError as e:
+        print("Error:", e)
+
+
+  def sort_movies_by_rating(self) -> str:
+    """prints movies, sorted by rating (high to low)"""
+    sorted_movies = self._sort_movies(self.__key_for_rating)
+
+    return self._storage.list_up_movies(sorted_movies)
+
+
+  def sort_movies_by_year(self) -> str:
+    """prints movies, sorted by year (high to low)
+
+    :param movies: a list of dictionaries with movie informations
+    """
+    sorted_movies = self._sort_movies(self.__key_for_rating)
+
+    return self._storage.list_up_movies(sorted_movies)
 
   def run(self):
     """gets movies form database and asks user for key(input).
@@ -328,6 +346,8 @@ class MovieApp:
       self.execute_programm_funktions()
 
       self.continue_with_programm()
+
+
 
     # Print menu
     # Get use command

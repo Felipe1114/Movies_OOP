@@ -7,8 +7,10 @@ class StorageJson(istorage.IStorage):
       self.__file_path = file_path
       self._movies = self.get_movie_data() # ist das richtig? oder muss ich das immer wieder aufrufen?
       self._movie_list = self.__json_to_list()
+      self.__key_for_rating = 'rating'
+      self.__key_for_name = 'name'
+      self.__key_for_year = 'year'
       print(f"class '{self}' wurd erstellt")
-
 
     except FileNotFoundError:
       self._write_file()
@@ -23,6 +25,7 @@ class StorageJson(istorage.IStorage):
 
 
   def get_movie_list(self):
+      """returns a list of movie f-strings"""
       self._movie_list = self.__json_to_list()
 
       return self._movie_list
@@ -31,10 +34,6 @@ class StorageJson(istorage.IStorage):
   def __json_to_list(self):
     """extracts movie name, moive rating and movie jear and writes it to a f-String.
     retunrs a list of moive-f-strings
-
-    :param data: json-file with movie datas
-    :param movie_list: list with movie-f-strings
-    :return: None
     """
     movie_list = []
 
@@ -48,9 +47,6 @@ class StorageJson(istorage.IStorage):
       movie_list.append(movie_f_string)
 
     return movie_list
-
-
-
 
 
   def add_movie(self, title, year, rating, poster):
@@ -138,12 +134,32 @@ class StorageJson(istorage.IStorage):
     self._movies = self.get_movie_data()
 
     movie_dict = self._movies[movie_index]
-    title = movie_dict["name"]
-    rating = movie_dict['rating']
-    year = movie_dict['year']
+    title = movie_dict[self.__key_for_name]
+    rating = movie_dict[self.__key_for_rating]
+    year = movie_dict[self.__key_for_year]
 
     return f"title:{title}, year: {year}, rating: {rating}"
 
+
+  def find_dict_by_name(self,searched_name: str) -> dict:
+    """Iterates thrue all dicts in the list(movies).
+    Checks, if searched name is a value from the key "name"."""
+    movies = self.get_movie_data()
+
+    for i, dictionary in enumerate(movies):
+      if dictionary[self.__key_for_name].lower() == searched_name.lower():
+        return movies[i]
+
+    raise ValueError("Given name not in movie-list. Please give an existing name")
+
+
+  def list_up_movies(self, movies) -> str:
+    """prints a list of movies"""
+    text = ""
+    for movie in movies:
+      text = text + f"{movie[self.__key_for_name]}({movie[self.__key_for_year]}): {movie[self.__key_for_rating]}" + "\n"  # print engine einbauen
+
+    return text
 
 
 if __name__ == "__main__":
