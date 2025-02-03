@@ -7,9 +7,9 @@ class StorageJson(istorage.IStorage):
       self.__file_path = file_path
       self._movies = self.get_movie_data() # ist das richtig? oder muss ich das immer wieder aufrufen?
       self._movie_list = self.__json_to_list()
-      self.__key_for_rating = 'rating'
-      self.__key_for_name = 'name'
-      self.__key_for_year = 'year'
+      self.key_for_rating = 'rating'
+      self.key_for_name = 'name'
+      self.key_for_year = 'year'
       print(f"class '{self}' wurd erstellt")
 
     except FileNotFoundError:
@@ -153,20 +153,85 @@ class StorageJson(istorage.IStorage):
     raise ValueError("Given name not in movie-list. Please give an existing name")
 
 
-  def list_up_movies(self, movies) -> str:
-    """prints a list of movies"""
-    text = ""
-    for movie in movies:
-      text = text + f"{movie[self.__key_for_name]}({movie[self.__key_for_year]}): {movie[self.__key_for_rating]}" + "\n"  # print engine einbauen
-
-    return text
+  def get_average(self) -> float:
+    '''calcultes the average of all movie ratings'''
+    ratings = self.sort_list_by_rating()
+    average = sum(ratings) / len(ratings)
 
 
+    return average
+
+
+  def get_median(self) -> float:
+    '''calculates the median from all ratings(values) of movies(dict)'''
+    sorted_list = self.sort_list_by_rating()
+
+    # finds the middle vlaue of the list (for the median)
+    mid_index = len(sorted_list) // 2 - 1
+
+    # when list is even
+    if len(sorted_list) % 2 == 0:
+      median = (sorted_list[mid_index] + sorted_list[mid_index + 1]) / 2
+
+    # when list is uneven
+    else:
+      median = sorted_list[mid_index]
+
+    return median
+
+
+  def sort_list_by_rating(self) -> list:
+    '''sorts the list(movies) by its ratings in the dicionaries'''
+    sorted_list = self.sort_movies(self.__key_for_rating)
+    rating_list = []
+
+    for dict in sorted_list:
+      rating_list.append(dict[self.__key_for_rating])
+
+    return rating_list
+
+
+  def sort_movies(self, key: str) -> list:
+    '''Sorts the List(movies) by rating, key is year or name'''
+    movies = self.get_movie_data()
+    sorted_movies = sorted(movies, key=lambda dict: dict[key], reverse=True)
+
+    return sorted_movies
 
 
 
-if __name__ == "__main__":
-  file_path = "../programm_storage/movies.json"
-  storage = StorageJson(file_path)
-  storage.list_movies()
-  storage.delete_movie("dreiaffen")
+  def get_movies_by_rating(self, rating_type: int) -> list:
+    '''gets a sorted movie(s) - by rating_type - in the list (movies)'''
+    sorted_movie_list = self.sort_movies(self.key_for_rating)
+    s_m_l = sorted_movie_list
+
+    if rating_type == 0 or rating_type == -1:
+
+
+      raitig_checker = s_m_l[rating_type][self.key_for_rating]
+      sorted_list_by_rating = []
+
+      for i in range(len(s_m_l)):
+        if s_m_l[i][self.key_for_rating] == raitig_checker:
+          sorted_list_by_rating.append(s_m_l[i])
+
+      return sorted_list_by_rating
+
+
+
+
+
+
+  def _get_worst_movies(self) -> list:
+    '''gets the worst movie(s) - by rating - in the list (movies)'''
+    sorted_movie_list = self._storage.sort_movies(self._storage.___storage.key_for_rating)
+
+
+    sml = sorted_movie_list
+
+
+
+    return worst_movies
+
+
+
