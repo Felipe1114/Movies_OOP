@@ -7,18 +7,11 @@ core funktionen refactorieren
 
 '''
 import random
+import copy
 
 class MovieApp:
   def __init__(self, storage):
     self._storage = storage
-    # TODO kriegen wir aus self._storage -> delete!!!
-    """ 
-    self._storage.___storage.key_for_rating = 'rating'
-    self._storage.key_for_name = 'name'
-    self._storage.key_for_year = 'year'
-    """
-
-    # TODO ordnen!!!
     self._operations = {
     0: exit,  # ("bye")
     1: self.list_up_movies,  # (movies),
@@ -27,10 +20,10 @@ class MovieApp:
     4: self._storage.update_movie, #(title, rating)
     5: self._get_movie_stats,
     6: self.print_random_movie,
-    7: self.search_movie,  # (movie_name),
-    8: self.sort_movies_by_rating,  # no print
-    9: self.sort_movies_by_year,  # no pirnt)
-    10: self.filter_movies  # (movies)
+    7: self.search_movie,
+    8: self.sort_movies_by_rating,
+    9: self.sort_movies_by_year,
+    10: self.filter_movies
   }
 
 
@@ -104,13 +97,6 @@ class MovieApp:
     return text
 
 
-
-
-
-
-
-
-
   def _generate_website(self):
     '''Gets movie data form self.storage, generates movie-HTML dokument'''
     pass
@@ -153,15 +139,13 @@ class MovieApp:
         print(e)
 
 
-
-
   def validade_programm_continuation(self, user_input):
     """validades if user_input is an empty string (len = 0). If not, an Error is risen"""
     if len(user_input) > 0:
       raise ValueError("Please press only Enter")
 
 
-  def _menu(self) -> str:
+  def __menu(self) -> str:
     """Displays the Menu to the user with the input commands"""
     return """\n===Menu:===\n
            \t0. Exit\n
@@ -177,6 +161,7 @@ class MovieApp:
            \t10. Filter movies"""
 
 
+
   def get_user_input(self):
     """gets a number between 0 and 8 from user"""
     while True:
@@ -187,8 +172,6 @@ class MovieApp:
 
       except ValueError as e:
         print(e)
-
-
 
 
   def validade_user_input(self) -> int:
@@ -209,33 +192,124 @@ class MovieApp:
       try:
         searched_name = input("Wich movie are you searching for?: ")
         searched_movie = self._storage.find_dict_by_name(searched_name)
-        return f'{searched_movie[self._storage.key_for_name]}({searched_movie[self._storage.key_for_year]}): {searched_movie[self._storage.___storage.key_for_rating]}'
+
+        self._print_single_movie(searched_movie)
 
       except ValueError as e:
         print("Error:", e)
 
 
-  def sort_movies_by_rating(self) -> str:
+  def sort_movies_by_rating(self) -> None:
     """prints movies, sorted by rating (high to low)"""
-    sorted_movies = self._storage.sort_movies(self._storage.___storage.key_for_rating)
+    sorted_movies = self._storage.sort_movies(self._storage.key_for_rating)
 
-    return self._storage.list_up_movies(sorted_movies)
+    self.list_up_movies(sorted_movies)
 
 
-  def sort_movies_by_year(self) -> str:
+  def sort_movies_by_year(self) -> None:
     """prints movies, sorted by year (high to low)"""
-    sorted_movies = self._storage.sort_movies(self._storage.___storage.key_for_rating)
+    sorted_movies = self._storage.sort_movies(self._storage.key_for_rating)
 
-    return self._storage.list_up_movies(sorted_movies)
+    self.list_up_movies(sorted_movies)
 
-  def run(self):
-    """gets movies form database and asks user for key(input).
-    Than executes function out of dictionary(function is value of given key)
-    """
+
+  def filter_movies(self) -> None:
+    """filters a deep copy of list(movies) by the filter values given by user"""
+    movies = self._storage.get_movie_data()
+
+    minimum_rating, start_year, end_year = self.get_filter_input()
+    filtred_movies = copy.deepcopy(movies)
+
+    if type(minimum_rating) is float:
+      self.filter_rating(filtred_movies, minimum_rating)
+
+    # if start_year and end_year got input
+    if type(start_year) is int and type(end_year) is int:
+      self.filter_by_start_and_end_year(filtred_movies, start_year, end_year)
+
+    # if only start_year got input
+    elif type(start_year) is int and type(end_year) is not int:
+      self.filter_by_start_year(filtred_movies, start_year)
+
+    # if only end_year got input
+    elif type(start_year) is not int and type(end_year) is int:
+      self.filter_by_end_year(filtred_movies, end_year)
+
+    return self.list_up_movies(filtred_movies)
+
+
+  def get_filter_input(self) -> tuple:
+    """gets the filter values from user. Changes types form input to float or integer"""
+    while True:
+      try:
+        minimum_rating = input("Enter minimum rating (leave blank for no minimum rating): ")
+        start_year = input("Enter start year (leave blank for no start year): ")
+        end_year = input("Enter end year (leave blank for no end year): ")
+
+        if len(minimum_rating) > 0:
+          minimum_rating = float(minimum_rating)
+        if len(start_year) > 0:
+          start_year = int(start_year)
+        if len(end_year) > 0:
+          end_year = int(end_year)
+
+        return minimum_rating, start_year, end_year
+
+      except ValueError as e:
+        print(f"Input must be empty or an number: {e}")
+
+
+  def filter_rating(self, filtred_movies, minimum_rating) -> None:
+    """makes a copy of movies and deletes all elements in the list, wich ratings are under minimum_rating"""
+    movies = self._storage.get_movie_data()
+
+    for index, value in enumerate(movies):
+      if movies[index][self._storage.key_for_rating] < minimum_rating:
+        filtred_movies.remove(movies[index])
+
+
+  def filter_by_end_year(self, filtred_movies, end_year) -> None:
+    """Filters all movies, with release years higher than end_year, out of movies_copy"""
+    movies = self._storage.get_movie_data()
+
+    for index, dictionary in enumerate(movies):
+
+      if dictionary[self._storage.key_for_year] < end_year:
+        continue
+      else:
+        filtred_movies.remove(dictionary)
+
+
+  def filter_by_start_year(self, movies_copy, start_year) -> None:
+    """Filters all movies, with release years lower than start_year, out of movies_copy"""
+    movies = self._storage.get_movie_data()
+
+    for index, dictionary in enumerate(movies):
+
+      if start_year < dictionary[self._storage.key_for_year]:
+        continue
+      else:
+        movies_copy.remove(dictionary)
+
+
+  def filter_by_start_and_end_year(self, movies_copy, start_year, end_year) -> None:
+    """Filters all movies, with release years out ouf give range, out of movies_copy"""
+    movies = self._storage.get_movie_data()
+
+    for i, dictionary in enumerate(movies):
+
+      if start_year < dictionary[self._storage.key_for_year] < end_year:
+        continue
+      else:
+        movies_copy.remove(dictionary)
+
+
+  def run(self) -> None:
+    """gets movies form database and asks user for key(input)"""
     print("********** Welcome to my Movies Database **********")
 
     while True:
-      print(self._menu())
+      print(self.__menu())
 
       self.execute_programm_funktions()
 

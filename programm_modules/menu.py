@@ -319,7 +319,7 @@ def filter_by_start_and_end_year(movies, movies_copy, start_year, end_year):
       movies_copy(list): copy of the list "movies".
       end_year(int): an integer, representing an release year
       start_year(int): an integer, representing an release year
-
+filter_rating
     Returns:
       movies_copy(list): a modified version of the list "moves_copy"
     """
