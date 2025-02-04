@@ -3,10 +3,10 @@ class IsMenu:
     self.applikation = applikation
 
 
-  def execute_programm_funktions(self):
+  def _execute_programm_funktions(self) -> None:
     """Takes the funktion_key and validades wich case of funktion the key is rasing"""
     movies = self.applikation.movie_data()
-    funktion_key = self.get_user_input()
+    funktion_key = self._get_user_input()
 
     if funktion_key == 0:
       exit('bye')
@@ -16,17 +16,17 @@ class IsMenu:
 
     elif funktion_key == 2:
       # title, year und rating bekommen
-      title, year, rating = self.applikation.get_user_input(funktion_key)
+      title, year, rating = self.applikation._get_user_input(funktion_key)
       self.applikation.add_new_movie(title, year, rating)
 
     elif funktion_key == 3:
       # title bekommen
-      title = self.applikation.get_user_input(funktion_key)
+      title = self.applikation._get_user_input(funktion_key)
       self.applikation.delete_existend_movie(title)
 
     elif funktion_key == 4:
       # title und new_rating bekommen
-      title, new_rating = self.applikation.get_user_input(funktion_key)
+      title, new_rating = self.applikation._get_user_input(funktion_key)
       self.applikation.update_existend_movie(title, new_rating)
 
     elif funktion_key == 5:
@@ -48,7 +48,7 @@ class IsMenu:
       self.applikation.filter_movies()
 
 
-  def menu_funktions(self) -> str:
+  def _menu_funktions(self) -> str:
     """Displays the Menu to the user with the input commands"""
     return """\n===Menu:===\n
            \t0. Exit\n
@@ -64,19 +64,19 @@ class IsMenu:
            \t10. Filter movies"""
 
 
-  def get_user_input(self):
+  def _get_user_input(self) -> int:
     """gets a number between 0 and 8 from user"""
     while True:
 
       try:
-        user_input = self.validade_user_input()
+        user_input = self._validade_user_input()
         return user_input
 
       except ValueError as e:
         print(e)
 
 
-  def validade_user_input(self) -> int:
+  def _validade_user_input(self) -> int:
     """gets an input from user and changes its type to integer"""
     user_input = int(input("What do you want to do?(0-10): "))
 
@@ -86,7 +86,7 @@ class IsMenu:
     return user_input
 
 
-  def continue_with_programm(self):
+  def _continue_with_programm(self) -> None:
     """get an empty string from user (by pressing Enter). If input is not empty, an Error is risen"""
     execution_number = 0
     while True:
@@ -111,11 +111,11 @@ class IsMenu:
     print("********** Welcome to my Movies Database **********")
 
     while True:
-      print(self.menu_funktions()) # Done
+      print(self._menu_funktions()) # Done
 
-      self.execute_programm_funktions()
+      self._execute_programm_funktions()
 
-      self.continue_with_programm()
+      self._continue_with_programm()
 
 
     # Print menu
