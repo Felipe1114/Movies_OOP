@@ -32,7 +32,6 @@ OPERATIONS = {
 
       continue_with_programm()
 
-  # TODO move to MENU
   def execute_programm_funktions(funktion_key, movies):
       """Takes the funktion_key and validades wich case of funktion the key is rasing.
 
