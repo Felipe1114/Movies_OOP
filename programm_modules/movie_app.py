@@ -14,11 +14,11 @@ class MovieApp:
     self._storage = storage
     self._operations = {
     0: exit,  # ("bye")
-    1: self.list_up_movies,  # (movies),
-    2: self._storage.add_movie, #(title, year, rating, poster)
+    1: self.list_up_movies,  #,
+    2: self.add_new_movie, #(title, year, rating, poster)
     3: self._storage.delete_movie, #(title)
     4: self._storage.update_movie, #(title, rating)
-    5: self._get_movie_stats,
+    5: self.get_movie_stats,
     6: self.print_random_movie,
     7: self.search_movie,
     8: self.sort_movies_by_rating,
@@ -26,6 +26,9 @@ class MovieApp:
     10: self.filter_movies
   }
 
+
+  def movie_data(self):
+    return self._storage.get_movie_data()
 
 
   def list_up_movies(self, sort_type: str=None) -> None:
@@ -49,6 +52,19 @@ class MovieApp:
 
       for movie in worst_movies:
         self._print_single_movie(movie)
+
+
+  # kann noch poster bekommen
+  def add_new_movie(self, title, year, rating):
+    self._storage.add_movie(title, year, rating)
+
+
+  def delete_existend_movie(self, title):
+    self._storage.delete_movie(title)
+
+
+  def update_existend_movie(self, title, new_rating):
+    self._storage.update_movie(title, new_rating)
 
 
   def print_random_movie(self) -> None:
@@ -75,7 +91,7 @@ class MovieApp:
       self._print_single_movie(movie)
 
 
-  def _get_movie_stats(self) -> str:
+  def get_movie_stats(self) -> str:
     '''Calculates and diyplays average rating, median rating, best and worst movie rating'''
     average = self._storage._get_average()
     median = self._storage._get_median()
@@ -100,88 +116,6 @@ class MovieApp:
   def _generate_website(self):
     '''Gets movie data form self.storage, generates movie-HTML dokument'''
     pass
-
-
-  def execute_programm_funktions(self, ):
-    """Takes the funktion_key and validades wich case of funktion the key is rasing"""
-    movies = self._storage.get_movie_data
-    funktion_key = self.get_user_input()
-
-    # the exit() funktion, wich is taking "bye" as argument
-    a_funktions = [0]
-    # all funktions, which are taking 'movies' as an argument
-    b_funktions = [1, 5, 6, 7, 8, 9, 10]
-    # all funktions, wich don´t take an argument
-    c_funktions = [2, 3, 4]
-
-
-    if funktion_key in a_funktions:
-      print(self._operations[funktion_key]("bye"))
-
-    elif funktion_key in b_funktions:
-      print(self._operations[funktion_key](movies))
-
-    elif funktion_key in c_funktions:
-      print(self._operations[funktion_key]())
-
-
-  def continue_with_programm(self):
-    """get an empty string from user (by pressing Enter). If input is not empty, an Error is risen"""
-    while True:
-      try:
-        continue_programm = input("press Enter to contiune")
-        self.validade_programm_continuation(continue_programm)
-
-        break
-
-
-      except ValueError as e:
-        print(e)
-
-
-  def validade_programm_continuation(self, user_input):
-    """validades if user_input is an empty string (len = 0). If not, an Error is risen"""
-    if len(user_input) > 0:
-      raise ValueError("Please press only Enter")
-
-
-  def __menu(self) -> str:
-    """Displays the Menu to the user with the input commands"""
-    return """\n===Menu:===\n
-           \t0. Exit\n
-           \t1. List movies\n
-           \t2. Add moives\n
-           \t3. Delete movie\n
-           \t4. Update movie\n
-           \t5. stats\n
-           \t6. Random movie\n
-           \t7. Search movie\n
-           \t8. Movies sorted by rating\n
-           \t9. Movies sorted by year\n
-           \t10. Filter movies"""
-
-
-
-  def get_user_input(self):
-    """gets a number between 0 and 8 from user"""
-    while True:
-
-      try:
-        user_input = self.validade_user_input()
-        return user_input
-
-      except ValueError as e:
-        print(e)
-
-
-  def validade_user_input(self) -> int:
-    """gets an input from user and changes its type to integer"""
-    user_input = int(input("What do you want to do?(0-10): "))
-
-    if 10 < user_input or user_input < 0:
-      raise ValueError("Error! Input must be between 0 and 8.")
-
-    return user_input
 
 
   def search_movie(self):
@@ -304,19 +238,23 @@ class MovieApp:
         movies_copy.remove(dictionary)
 
 
-  def run(self) -> None:
-    """gets movies form database and asks user for key(input)"""
-    print("********** Welcome to my Movies Database **********")
-
+  def get_user_input(self, funktion_key):
+    """Gets user_input; validades input"""
     while True:
-      print(self.__menu())
+      try:
+        if funktion_key == 2:
+          title = input("Type in movie name: ")
+          year = int(input("Type in release year(int): "))
+          rating = float(input("Type in movie rating(float): "))
+          return title, year, rating
 
-      self.execute_programm_funktions()
+        elif funktion_key == 3:
+          title = input("Type in movie name: ")
+          return title
+        elif funktion_key == 4:
+          title = input("Type in movie name: ")
+          rating = float(input("Type in movie rating(float): "))
+          return title, rating
 
-      self.continue_with_programm()
-
-
-
-    # Print menu
-    # Get use command
-    # Execute command
+      except ValueError as e:
+        print(e)

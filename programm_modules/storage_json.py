@@ -48,10 +48,9 @@ class StorageJson(istorage.IStorage):
 
     return movie_list
 
-
-  def add_movie(self, title, year, rating, poster):
+  # kann noch poster bekommen...
+  def add_movie(self, title, year, rating, poster=None):
     """Adds a movie to the storage"""
-    # ist poster richtig hier eingefügt?
     self._movies = self.get_movie_data()
 
     new_movie = {"name": title, "year": year, "rating": rating, "poster": poster}
