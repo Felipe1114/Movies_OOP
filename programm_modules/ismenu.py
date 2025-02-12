@@ -16,17 +16,17 @@ class IsMenu:
 
     elif funktion_key == 2:
       # title, year und rating bekommen
-      title, year, rating = self.applikation._get_user_input(funktion_key)
+      title, year, rating = self.applikation._get_extra_data(funktion_key)
       self.applikation.add_new_movie(title, year, rating)
 
     elif funktion_key == 3:
       # title bekommen
-      title = self.applikation._get_user_input(funktion_key)
+      title = self.applikation._get_extra_data(funktion_key)
       self.applikation.delete_existend_movie(title)
 
     elif funktion_key == 4:
       # title und new_rating bekommen
-      title, new_rating = self.applikation._get_user_input(funktion_key)
+      title, new_rating = self.applikation._get_extra_data(funktion_key)
       self.applikation.update_existend_movie(title, new_rating)
 
     elif funktion_key == 5:
@@ -37,13 +37,13 @@ class IsMenu:
 
     elif funktion_key == 7:
       self.applikation.search_movie()
-
+#TODO hier funktioniert etwas nicht...kein output
     elif funktion_key == 8:
       self.applikation.sort_movies_by_rating()
-
+# TODO hier funktioniert etwas nicht...kein output
     elif funktion_key == 9:
       self.applikation.sort_movies_by_year()
-      #
+# TODO hier funktioniert etwas nicht...kein output
     elif funktion_key == 10:
       self.applikation.filter_movies()
 
@@ -70,6 +70,7 @@ class IsMenu:
 
       try:
         user_input = self._validade_user_input()
+
         return user_input
 
       except ValueError as e:

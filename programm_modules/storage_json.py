@@ -89,10 +89,10 @@ class StorageJson(istorage.IStorage):
 
     for index, value in enumerate(self._movies):
 
-      if value["name"] == title:
+      if value["name"].lower() == title.lower():
         title_index = index
 
-    if isinstance(title_index, type(None)):
+    if not isinstance(title_index, int):
       raise TypeError("list indices must be integers or slices, not NoneType")
 
     return title_index

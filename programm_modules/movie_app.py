@@ -1,13 +1,7 @@
-'''
-storage befehle:
-movie_daten erhalten: self._storage.get_movie_data()
-movie_list erhalten: self._storage.get_movie_list()
-workflow: 
-core funktionen refactorieren
-
-'''
 import random
 import copy
+
+
 
 class MovieApp:
   def __init__(self, storage):
@@ -34,7 +28,7 @@ class MovieApp:
   def list_up_movies(self, sort_type: str=None) -> None:
     '''returns a sortet list of movies, depending on 'sort_type: best/worst, if existent'''
     if sort_type is None:
-      movies_list = self._storage.get_movie_list()
+      movies_list = self._storage.get_movie_data()
 
       self._print_movies(movies_list)
 
@@ -48,7 +42,7 @@ class MovieApp:
     elif sort_type == 'worst':
       # get worst movie will ich aus storage bekommen
 
-      worst_movies = self._storage.get_movies_by_raging(-1)
+      worst_movies = self._storage.get_movies_by_rating(-1)
 
       for movie in worst_movies:
         self._print_single_movie(movie)
@@ -79,8 +73,8 @@ class MovieApp:
 
   def _print_single_movie(self, movie: dict) -> None:
     """prints a single movie, out of a dict"""
-    print(f"{movie[self._storage._storage.key_for_name]}"
-          f"({movie[self._storage._storage.key_for_year]}): "
+    print(f"{movie[self._storage.key_for_name]}"
+          f"({movie[self._storage.key_for_year]}): "
           f"{movie[self._storage.key_for_rating]}")
 
 
@@ -93,8 +87,8 @@ class MovieApp:
 
   def get_movie_stats(self) -> str:
     '''Calculates and diyplays average rating, median rating, best and worst movie rating'''
-    average = self._storage._get_average()
-    median = self._storage._get_median()
+    average = self._storage.get_average()
+    median = self._storage.get_median()
 
 
     text_for_best_movies = self.list_up_movies('best')
@@ -108,7 +102,6 @@ class MovieApp:
             f'{text_for_best_movies}\n'
             f'he worst movie/s is/are:\n'
             f'{text_for_worst_movies}')
-
 
     return text
 
@@ -238,8 +231,8 @@ class MovieApp:
         movies_copy.remove(dictionary)
 
 
-  def get_user_input(self, funktion_key):
-    """Gets user_input; validades input"""
+  def _get_extra_data(self, funktion_key):
+    """"""
     while True:
       try:
         if funktion_key == 2:
@@ -251,6 +244,7 @@ class MovieApp:
         elif funktion_key == 3:
           title = input("Type in movie name: ")
           return title
+
         elif funktion_key == 4:
           title = input("Type in movie name: ")
           rating = float(input("Type in movie rating(float): "))
@@ -258,3 +252,5 @@ class MovieApp:
 
       except ValueError as e:
         print(e)
+
+
