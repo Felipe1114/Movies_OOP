@@ -27,6 +27,7 @@ class MovieApp:
 
   def list_up_movies(self, sort_type: str=None) -> None:
     '''returns a sortet list of movies, depending on 'sort_type: best/worst, if existent'''
+    print("in list up movies")
     if sort_type is None:
       movies_list = self._storage.get_movie_data()
 
@@ -80,6 +81,7 @@ class MovieApp:
 
   def _print_movies(self, movie_list: list) -> None:
     """"""
+    print("in _print_movies")
     for index, movie in enumerate(movie_list):
       print(index + 1, end='. ')
       self._print_single_movie(movie)
@@ -121,6 +123,7 @@ class MovieApp:
         searched_movie = self._storage.find_dict_by_name(searched_name)
 
         self._print_single_movie(searched_movie)
+        break
 
       except ValueError as e:
         print("Error:", e)
@@ -130,14 +133,14 @@ class MovieApp:
     """prints movies, sorted by rating (high to low)"""
     sorted_movies = self._storage.sort_movies(self._storage.key_for_rating)
 
-    self.list_up_movies(sorted_movies)
+    self._print_movies(sorted_movies)
 
 
   def sort_movies_by_year(self) -> None:
     """prints movies, sorted by year (high to low)"""
-    sorted_movies = self._storage.sort_movies(self._storage.key_for_rating)
+    sorted_movies = self._storage.sort_movies(self._storage.key_for_year)
 
-    self.list_up_movies(sorted_movies)
+    self._print_movies(sorted_movies)
 
 
   def filter_movies(self) -> None:
@@ -162,7 +165,7 @@ class MovieApp:
     elif type(start_year) is not int and type(end_year) is int:
       self.filter_by_end_year(filtred_movies, end_year)
 
-    return self.list_up_movies(filtred_movies)
+    return self._print_movies(filtred_movies)
 
 
   def get_filter_input(self) -> tuple:
