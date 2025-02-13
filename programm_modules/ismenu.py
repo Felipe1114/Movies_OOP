@@ -40,10 +40,10 @@ class IsMenu:
 
     elif funktion_key == 8:
       self.applikation.sort_movies_by_rating() # falsche methode
-# TODO funktion '9' sortiert nicht nach jahr
+
     elif funktion_key == 9:
       self.applikation.sort_movies_by_year()
-# TODO hier funktioniert etwas nicht...kein output
+
     elif funktion_key == 10:
       self.applikation.filter_movies()
 
