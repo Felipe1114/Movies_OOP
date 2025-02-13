@@ -7,9 +7,11 @@ class StorageJson(istorage.IStorage):
       self.__file_path = file_path
       self._movies = self.get_movie_data() # ist das richtig? oder muss ich das immer wieder aufrufen?
       self._movie_list = self.__json_to_list()
+
       self.key_for_rating = 'rating'
       self.key_for_name = 'name'
       self.key_for_year = 'year'
+
       print(f"class '{self}' wurd erstellt")
 
     except FileNotFoundError:
@@ -61,7 +63,6 @@ class StorageJson(istorage.IStorage):
     # added movie, is the last item in list
     last_item_index = -1
     print(f"Added new Movie: {self.__print_movie_data(last_item_index)}")
-    # TODO exceptions einfügen
 
 
   def delete_movie(self, title):
