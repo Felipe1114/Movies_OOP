@@ -7,13 +7,6 @@ class IStorage(ABC):
         """gets movie datas"""
         pass
 
-    @abstractmethod
-    def get_movie_list(self):
-        """returns a list with movie-f-strings
-
-        :return: movie_list
-        """
-        pass
 
     @abstractmethod
     def add_movie(self, title, year, rating, poster):

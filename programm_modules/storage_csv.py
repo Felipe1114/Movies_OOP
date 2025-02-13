@@ -5,8 +5,8 @@ class StorageCSV(IStorage):
   def __init__(self, file_path):
     try:
       self.__file_path = file_path
-      self.__movie_lines = self.get_movie_data() # gets all csv lines
-      self._movies = self.csv_to_list() # ist das richtig? oder muss ich das immer wieder aufrufen?
+      self.__movie_lines = self.get_csv_lines() # gets all csv lines
+      self._movies = self.get_movie_data() # ist das richtig? oder muss ich das immer wieder aufrufen?
       # self._movie_list = self.__json_to_list() # brauche ich das noch?!
       
       self.key_for_rating = 'rating'
@@ -14,12 +14,14 @@ class StorageCSV(IStorage):
       self.key_for_year = 'year'
       
       print(f"class '{self}' wurd erstellt")
+      print("StorageCSV erstellt:", vars(self))
 
     except FileNotFoundError:
+
       self._write_file()
 
 
-  def get_movie_data(self):
+  def get_csv_lines(self):
     """returns a list of strings from the csv file"""
     with open(self.__file_path, 'r') as file:
       lines = file.readlines()
@@ -27,9 +29,9 @@ class StorageCSV(IStorage):
     return lines
 
 
-  def csv_to_list(self):
+  def get_movie_data(self):
     """gets a list of strings. converts list to a list with dictionaries"""
-    lines = self.get_movie_data()
+    lines = self.get_csv_lines()# Todo
     # creates indicies for dictionary
     name, year, rating = lines[0].strip().split(', ')
 
@@ -62,9 +64,8 @@ class StorageCSV(IStorage):
 
       new_list.append(line)
 
-      self._movie_lines = new_list
 
-    self._save_movies()
+    self._save_movies(new_list)
 
 
   def add_movie(self, title, year, rating, poster=None):
@@ -75,15 +76,16 @@ class StorageCSV(IStorage):
 
     self._save_movies()
 
-
-  def _save_movies(self):
+  #TODO save_movies muss direckt die daten bekommen, die gespeichert werden sollen
+  # TODO problem mit der absptract method aus IStorage lösen (_save_movies() hat keine argumente in base clss)
+  def _save_movies(self, new_lines):
     """saves self.__movie_lines to the csv file"""
     with open(self.__file_path, "w") as file:
-      lines = self.__movie_lines
+      # lines = self.__movie_lines
       csv_data = ""
 
       # converts list of strings, to a long string
-      for index, line in enumerate(lines):
+      for index, line in enumerate(new_lines):
         csv_data += line
 
       file.write(csv_data)
@@ -97,7 +99,7 @@ class StorageCSV(IStorage):
   def update_movie(self, title, rating):
     """updates the self.movies - list; afterwards vonverts this data to csv"""
     try:
-      self._movies = self.csv_to_list()
+      self._movies = self.get_movie_data()
 
       title_index = self._find_movie_index(title)
 
@@ -114,7 +116,7 @@ class StorageCSV(IStorage):
   def delete_movie(self, title):
     """removes a moive, by given title, from the storage"""
     try:
-      self._movies = self.csv_to_list()
+      self._movies = self.get_movie_data()
 
       title_index = self._find_movie_index(title)
 
@@ -130,7 +132,7 @@ class StorageCSV(IStorage):
 
   def _find_movie_index(self, title):
     """Finds the index of the movie dict, by its title"""
-    self._movies = self.csv_to_list()
+    self._movies = self.get_movie_data()
 
     title_index = None
 
@@ -185,7 +187,7 @@ class StorageCSV(IStorage):
 
   def sort_movies(self, key: str) -> list:
     '''Sorts the List(movies) by rating, key is year or name'''
-    movies = self.csv_to_list()
+    movies = self.get_movie_data()
     sorted_movies = sorted(movies, key=lambda dictionary: dictionary[key], reverse=True)
 
     return sorted_movies
