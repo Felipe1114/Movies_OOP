@@ -9,7 +9,7 @@ class IStorage(ABC):
 
 
     @abstractmethod
-    def add_movie(self, title, year, rating, poster):
+    def add_movie(self, title, year, rating, poster=None):
         """Adds a movie to the storage"""
         pass
 

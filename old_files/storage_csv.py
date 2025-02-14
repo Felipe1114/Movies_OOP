@@ -74,11 +74,10 @@ class StorageCSV(IStorage):
 
     self.__movie_lines.append(new_movie)
 
-    self._save_movies()
+    self._save_movies(self.__movie_lines)
 
   #TODO save_movies muss direckt die daten bekommen, die gespeichert werden sollen
-  # TODO problem mit der absptract method aus IStorage lösen (_save_movies() hat keine argumente in base clss)
-  def _save_movies(self, new_lines):
+  def _save_movies(self, new_lines=None):
     """saves self.__movie_lines to the csv file"""
     with open(self.__file_path, "w") as file:
       # lines = self.__movie_lines
@@ -93,7 +92,9 @@ class StorageCSV(IStorage):
 
   def _write_file(self):
     with open (self.__file_path, "w") as file:
-      file.write("name, year, rating\n")
+      file.write("name, year, rating\n"
+                 "name1, year1, rating1")
+    print(f"file: {self.__file_path} was created")
 
 
   def update_movie(self, title, rating):

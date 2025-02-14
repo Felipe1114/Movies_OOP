@@ -194,7 +194,7 @@ class MovieApp:
     movies = self._storage.get_movie_data()
 
     for index, value in enumerate(movies):
-      if movies[index][self._storage.key_for_rating] < minimum_rating:
+      if float(movies[index][self._storage.key_for_rating]) < minimum_rating:
         filtred_movies.remove(movies[index])
 
 
