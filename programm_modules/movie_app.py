@@ -60,7 +60,7 @@ class MovieApp:
 
   # kann noch poster bekommen
   def add_new_movie(self):
-    new_movie = self._omdbapi.get_movie_from_api()
+    new_movie = self._omdbapi.validate_movie(self._omdbapi.get_movie_from_api())
 
     # if Movie_name not found, or no connection to API
     if new_movie is None:
@@ -96,7 +96,6 @@ class MovieApp:
 
   def _print_movies(self, movie_list: list) -> None:
     """"""
-    print("in _print_movies")
     for index, movie in enumerate(movie_list):
       print(index + 1, end='. ')
       self._print_single_movie(movie)

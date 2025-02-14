@@ -10,7 +10,7 @@ class StorageJson(istorage.IStorage):
       self._movie_list = self.__json_to_list()
 
       self.key_for_rating = 'rating'
-      self.key_for_name = 'name'
+      self.key_for_name = 'title'
       self.key_for_year = 'year'
 
       print(f"class '{self}' wurd erstellt")

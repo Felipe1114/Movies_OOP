@@ -6,7 +6,7 @@ class StorageCSV(istorage.IStorage):
     self.__file_path = file_path
     self._movies = self.get_movie_data()
     self.key_for_rating = 'rating'
-    self.key_for_name = 'name'
+    self.key_for_name = 'title'
     self.key_for_year = 'year'
     print(f"Class '{self}' wurde erstellt")
 
