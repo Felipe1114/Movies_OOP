@@ -1,6 +1,7 @@
 from programm_modules import istorage
 import json
 
+
 class StorageJson(istorage.IStorage):
   def __init__(self, file_path):
     try:
@@ -51,18 +52,28 @@ class StorageJson(istorage.IStorage):
     return movie_list
 
   # kann noch poster bekommen...
-  def add_movie(self, title, year, rating, poster=None):
-    """Adds a movie to the storage"""
-    self._movies = self.get_movie_data()
+  def add_movie(self, api_response):
+    """Adds a movie to the JSON storage from API response."""
+    movie_data = {
+      "title": api_response.get("title"),
+      "year": api_response.get("year"),
+      "rating": api_response.get("rating"),
+      "poster": api_response.get("poster")
+    }
 
-    new_movie = {"name": title, "year": year, "rating": rating, "poster": poster}
-    self._movies.append(new_movie)
+    """shows witch data type the values have
+    for key, value in movie_data.items():
+      print(f"{key}: {value}={type(value)}")"""
+    # gets actual movie_data
+    movies = self.get_movie_data()
+    # appends new movie to movie data
+    movies.append(movie_data)
 
-    self._save_movies()
+    # saves new dict to json
+    with open(self.__file_path, 'w') as json_file:
+      json.dump(movies, json_file, indent=4)
 
-    # added movie, is the last item in list
-    last_item_index = -1
-    print(f"Added new Movie: {self.__print_movie_data(last_item_index)}")
+    print(f"Added new Movie to JSON: {movie_data['title']}")
 
 
   def delete_movie(self, title):
@@ -80,6 +91,8 @@ class StorageJson(istorage.IStorage):
 
     except TypeError as e:
       print(e)
+    except IndexError:
+      return None
 
 
   def _find_movie_index(self, title):
@@ -89,9 +102,12 @@ class StorageJson(istorage.IStorage):
     title_index = None
 
     for index, value in enumerate(self._movies):
+      try:
+        if value["name"].lower() == title.lower():
+          title_index = index
+      except KeyError:
+        return None
 
-      if value["name"].lower() == title.lower():
-        title_index = index
 
     if not isinstance(title_index, int):
       raise TypeError("list indices must be integers or slices, not NoneType")
@@ -114,6 +130,8 @@ class StorageJson(istorage.IStorage):
 
     except TypeError as e:
       print(e)
+    except IndexError:
+      return None
 
 
   def _save_movies(self):
@@ -186,7 +204,7 @@ class StorageJson(istorage.IStorage):
     rating_list = []
 
     for dict in sorted_list:
-      rating_list.append(dict[self.key_for_rating])
+      rating_list.append(float(dict[self.key_for_rating]))
 
     return rating_list
 
@@ -194,7 +212,7 @@ class StorageJson(istorage.IStorage):
   def sort_movies(self, key: str) -> list:
     '''Sorts the List(movies) by rating, key is year or name'''
     movies = self.get_movie_data()
-    sorted_movies = sorted(movies, key=lambda dict: dict[key], reverse=True)
+    sorted_movies = sorted(movies, key=lambda dict: float(dict[key]), reverse=True)
 
     return sorted_movies
 
@@ -206,7 +224,6 @@ class StorageJson(istorage.IStorage):
     s_m_l = sorted_movie_list
 
     if rating_type == 0 or rating_type == -1:
-
 
       raitig_checker = s_m_l[rating_type][self.key_for_rating]
       sorted_list_by_rating = []

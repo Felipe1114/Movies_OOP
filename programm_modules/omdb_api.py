@@ -5,32 +5,38 @@ class OmdbApi:
         self.api_key = api_key
         self.base_url = "http://www.omdbapi.com/"
 
-    def search_movie_by_title(self, title: str):
+    def get_movie_from_api(self):
         """Searches for a movie by title and returns the movie data."""
-        params = {
-            "t": title,  # Movie title to search for
-            "apikey": self.api_key
-        }
+        while True:
+            title = input("Enter movie title (or press Enter to return to main menu): ").strip()
 
-        response = requests.get(self.base_url, params=params)
-
-        if response.status_code == 200:
-            data = response.json()
-
-            # Wenn der Film gefunden wird
-            if data.get("Response") == "True":
-                return {
-                    "title": data.get("Title"),
-                    "year": data.get("Year"),
-                    "rating": data.get("imdbRating"),
-                    "genre": data.get("Genre"),
-                    "director": data.get("Director"),
-                    "actors": data.get("Actors"),
-                    "plot": data.get("Plot")
-                }
-            else:
-                print("Error: Movie not found.")
+            if title == "":
+                print("Returning to main menu...")
                 return None
-        else:
-            print("Error: Failed to connect to the OMDb API.")
-            return None
+
+            params = {
+                "t": title,  # Movie title to search for
+                "apikey": self.api_key
+            }
+
+            response = requests.get(self.base_url, params=params)
+
+            if response.status_code == 200:
+                data = response.json()
+
+                # Wenn der Film gefunden wird
+                if data.get("Response") == "True":
+                    return {
+                        "title": data.get("Title"),
+                        "year": int(data.get("Year")),
+                        "rating": float(data.get("imdbRating")),
+                        "poster": data.get("Poster")
+                    }
+                else:
+                    print("Error: Movie not found.")
+
+            else:
+                print("Error: Failed to connect to the OMDb API.")
+                print("Returning to main menu...")
+
+                return None

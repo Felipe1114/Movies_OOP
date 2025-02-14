@@ -15,19 +15,17 @@ class IsMenu:
       self.applikation.list_up_movies()
 
     elif funktion_key == 2:
-      # title, year und rating bekommen
-      title, year, rating = self.applikation._get_extra_data(funktion_key)
-      self.applikation.add_new_movie(title, year, rating)
+      self.applikation.add_new_movie() # film comes from the API
 
     elif funktion_key == 3:
-      # title bekommen
       title = self.applikation._get_extra_data(funktion_key)
       self.applikation.delete_existend_movie(title)
 
+    # update movie wird nicht mehr gebrucht
     elif funktion_key == 4:
-      # title und new_rating bekommen
-      title, new_rating = self.applikation._get_extra_data(funktion_key)
-      self.applikation.update_existend_movie(title, new_rating)
+      """title, new_rating = self.applikation._get_extra_data(funktion_key)
+      self.applikation.update_existend_movie(title, new_rating)"""
+      print("This feature is offline")
 
     elif funktion_key == 5:
       self.applikation.get_movie_stats()

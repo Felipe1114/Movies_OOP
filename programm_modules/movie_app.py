@@ -1,15 +1,24 @@
 import random
 import copy
+from programm_modules.storage_json import StorageJson
+from programm_modules.storage_csv import StorageCSV
 
 
 
 class MovieApp:
-  def __init__(self, storage):
-    self._storage = storage
+  def __init__(self, omdbapi, file_path, storage_type='json'):
+    self._omdbapi = omdbapi
+    self.file_path = file_path
+    if storage_type:
+      if storage_type == 'json':
+        self._storage = StorageJson(self.file_path)
+      if storage_type == 'csv':
+        self._storage = StorageCSV(self.file_path)
+
     self._operations = {
     0: exit,  # ("bye")
     1: self.list_up_movies,  #,
-    2: self.add_new_movie, #(title, year, rating, poster)
+    2: self.add_new_movie, # title is gettet in omdapi
     3: self._storage.delete_movie, #(title)
     4: self._storage.update_movie, #(title, rating)
     5: self.get_movie_stats,
@@ -50,8 +59,14 @@ class MovieApp:
 
 
   # kann noch poster bekommen
-  def add_new_movie(self, title, year, rating):
-    self._storage.add_movie(title, year, rating)
+  def add_new_movie(self):
+    new_movie = self._omdbapi.get_movie_from_api()
+
+    # if Movie_name not found, or no connection to API
+    if new_movie is None:
+      return None
+
+    self._storage.add_movie(new_movie)
 
 
   def delete_existend_movie(self, title):
@@ -193,9 +208,14 @@ class MovieApp:
     """makes a copy of movies and deletes all elements in the list, wich ratings are under minimum_rating"""
     movies = self._storage.get_movie_data()
 
+
     for index, value in enumerate(movies):
-      if float(movies[index][self._storage.key_for_rating]) < minimum_rating:
-        filtred_movies.remove(movies[index])
+      try:
+
+        if float(movies[index][self._storage.key_for_rating]) < minimum_rating:
+          filtred_movies.remove(movies[index])
+      except ValueError:
+        continue
 
 
   def filter_by_end_year(self, filtred_movies, end_year) -> None:
@@ -215,12 +235,13 @@ class MovieApp:
     movies = self._storage.get_movie_data()
 
     for index, dictionary in enumerate(movies):
-
-      if start_year < dictionary[self._storage.key_for_year]:
+      try:
+        if start_year < int(dictionary[self._storage.key_for_year]):
+          continue
+        else:
+          movies_copy.remove(dictionary)
+      except ValueError:
         continue
-      else:
-        movies_copy.remove(dictionary)
-
 
   def filter_by_start_and_end_year(self, movies_copy, start_year, end_year) -> None:
     """Filters all movies, with release years out ouf give range, out of movies_copy"""
@@ -238,13 +259,8 @@ class MovieApp:
     """"""
     while True:
       try:
-        if funktion_key == 2:
-          title = input("Type in movie name: ")
-          year = int(input("Type in release year(int): "))
-          rating = float(input("Type in movie rating(float): "))
-          return title, year, rating
 
-        elif funktion_key == 3:
+        if funktion_key == 3 or funktion_key == 2:
           title = input("Type in movie name: ")
           return title
 
