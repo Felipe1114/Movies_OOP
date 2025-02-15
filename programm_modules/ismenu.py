@@ -21,10 +21,10 @@ class IsMenu:
       title = self.applikation._get_extra_data(funktion_key)
       self.applikation.delete_existend_movie(title)
 
-    # update movie wird nicht mehr gebrucht
+    # update movie wird nicht mehr gebraucht
     elif funktion_key == 4:
-      """title, new_rating = self.applikation._get_extra_data(funktion_key)
-      self.applikation.update_existend_movie(title, new_rating)"""
+      # title, new_rating = self.applikation._get_extra_data(funktion_key)
+      # self.applikation.update_existend_movie(title, new_rating)
       print("This feature is offline")
 
     elif funktion_key == 5:
@@ -45,6 +45,9 @@ class IsMenu:
     elif funktion_key == 10:
       self.applikation.filter_movies()
 
+    elif funktion_key == 11:
+      self.applikation.generate_website()
+
 
   def _menu_funktions(self) -> str:
     """Displays the Menu to the user with the input commands"""
@@ -59,7 +62,8 @@ class IsMenu:
            \t7. Search movie\n
            \t8. Movies sorted by rating\n
            \t9. Movies sorted by year\n
-           \t10. Filter movies"""
+           \t10. Filter movies\n
+           \t11. Create website"""
 
 
   def _get_user_input(self) -> int:
@@ -77,10 +81,10 @@ class IsMenu:
 
   def _validade_user_input(self) -> int:
     """gets an input from user and changes its type to integer"""
-    user_input = int(input("What do you want to do?(0-10): "))
+    user_input = int(input("What do you want to do?(0-11): "))
 
-    if 10 < user_input or user_input < 0:
-      raise ValueError("Error! Input must be between 0 and 10.")
+    if 11 < user_input or user_input < 0:
+      raise ValueError("Error! Input must be between 0 and 11.")
 
     return user_input
 
