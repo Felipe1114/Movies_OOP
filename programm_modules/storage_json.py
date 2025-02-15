@@ -6,7 +6,7 @@ class StorageJson(istorage.IStorage):
   def __init__(self, file_path):
     try:
       self.__file_path = file_path
-      self._movies = self.get_movie_data() # ist das richtig? oder muss ich das immer wieder aufrufen?
+      self._movies = self.get_movie_data()
       self._movie_list = self.__json_to_list()
 
       self.key_for_rating = 'rating'
@@ -215,7 +215,6 @@ class StorageJson(istorage.IStorage):
     sorted_movies = sorted(movies, key=lambda dict: float(dict[key]), reverse=True)
 
     return sorted_movies
-
 
 
   def get_movies_by_rating(self, rating_type: int) -> list:

@@ -13,6 +13,7 @@ class IStorage(ABC):
         """Adds a movie to the storage"""
         pass
 
+
     @abstractmethod
     def delete_movie(self, title):
         """removes a moive from the storage"""

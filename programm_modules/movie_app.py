@@ -4,7 +4,6 @@ from programm_modules.storage_json import StorageJson
 from programm_modules.storage_csv import StorageCSV
 
 
-
 class MovieApp:
   def __init__(self, omdbapi, file_path, web_generator, storage_type='json'):
     self._omdbapi = omdbapi
@@ -21,11 +20,11 @@ class MovieApp:
     self.web_generator.define_storage(self._storage)
 
     self._operations = {
-    0: exit,  # ("bye")
-    1: self.list_up_movies,  #,
-    2: self.add_new_movie, # title is gettet in omdapi
-    3: self._storage.delete_movie, #(title)
-    4: self._storage.update_movie, #(title, rating)
+    0: exit,
+    1: self.list_up_movies,
+    2: self.add_new_movie,
+    3: self._storage.delete_movie,
+    4: self._storage.update_movie,
     5: self.get_movie_stats,
     6: self.print_random_movie,
     7: self.search_movie,
@@ -37,6 +36,7 @@ class MovieApp:
 
 
   def movie_data(self):
+    """returns movie data from self._storage"""
     return self._storage.get_movie_data()
 
 

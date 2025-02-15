@@ -21,7 +21,7 @@ class IsMenu:
       title = self.applikation._get_extra_data(funktion_key)
       self.applikation.delete_existend_movie(title)
 
-    # update movie wird nicht mehr gebraucht
+    # is not necesarry any more
     elif funktion_key == 4:
       # title, new_rating = self.applikation._get_extra_data(funktion_key)
       # self.applikation.update_existend_movie(title, new_rating)
@@ -37,7 +37,7 @@ class IsMenu:
       self.applikation.search_movie()
 
     elif funktion_key == 8:
-      self.applikation.sort_movies_by_rating() # falsche methode
+      self.applikation.sort_movies_by_rating()
 
     elif funktion_key == 9:
       self.applikation.sort_movies_by_year()
@@ -114,13 +114,9 @@ class IsMenu:
     print("********** Welcome to my Movies Database **********")
 
     while True:
-      print(self._menu_funktions()) # Done
+      print(self._menu_funktions())
 
       self._execute_programm_funktions()
 
       self._continue_with_programm()
 
-
-    # Print menu
-    # Get use command
-    # Execute command
