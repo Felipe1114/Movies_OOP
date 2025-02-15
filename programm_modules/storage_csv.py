@@ -113,7 +113,6 @@ class StorageCSV(istorage.IStorage):
     return sorted_movies
 
 
-  # TODO zeile 110 ist falsch. geht falsch mit datentyp um
   def get_movies_by_rating(self, rating_type: int):
     """ sorted_movies = self.sort_movies()
      if rating_type in {0, -1}:
