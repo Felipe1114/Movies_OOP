@@ -1,12 +1,17 @@
 class MovieWebsiteGenerator:
   """Generates an HTML file displaying movies with posters."""
 
-  def __init__(self, storage):
-    self.storage = storage  # Expects a storage object that provides movie data
+  def __init__(self):
+    self.storage = self.define_storage()  # Expects a storage object that provides movie data
 
-  def generate_html(self, filename="index.html"):
+    if self.storage is None:
+      print("Waitng for storage...")
+
+    print(f"initialated {self}")
+
+  def generate_html(self, filename="./programm_storage/index.html"):
     """Creates an HTML file with the movies from storage."""
-    movies = self.storage.get_movies()  # Assumes storage has a method to fetch movies
+    movies = self.storage._movies  # Assumes storage has a method to fetch movies
 
     html_content = """
       <html>
@@ -40,7 +45,16 @@ class MovieWebsiteGenerator:
       </html>
       """
 
+
     with open(filename, "w", encoding="utf-8") as file:
-      file.write(html_content)
+        file.write(html_content)
+
+
+
 
     print(f"Website generated and saved as {filename}")
+
+
+  def define_storage(self, storage=None):
+    self.storage = storage
+    print(f"defined storage as {self.storage} in {self}")
