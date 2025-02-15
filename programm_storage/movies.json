@@ -1,52 +1,20 @@
 [
     {
-        "name": "The Shawshank Redemption",
-        "year": 1994,
-        "rating": 9.5
+        "title": "Titanic",
+        "year": 1997,
+        "rating": 7.9,
+        "poster": "https://m.media-amazon.com/images/M/MV5BYzYyN2FiZmUtYWYzMy00MzViLWJkZTMtOGY1ZjgzNWMwN2YxXkEyXkFqcGc@._V1_SX300.jpg"
     },
     {
-        "name": "The Room",
-        "year": 2003,
-        "rating": 3.6
+        "title": "Peter Pan",
+        "year": 1953,
+        "rating": 7.3,
+        "poster": "https://m.media-amazon.com/images/M/MV5BOGUwNjg5MWItNTc5OC00MTNkLWEwNzYtYzA1M2Y4MWU3NmQwXkEyXkFqcGc@._V1_SX300.jpg"
     },
     {
-        "name": "The Godfather",
-        "year": 1972,
-        "rating": 9.2
-    },
-    {
-        "name": "The Godfather: Part II",
-        "year": 1974,
-        "rating": 9.0
-    },
-    {
-        "name": "The Dark Knight",
-        "year": 2008,
-        "rating": 9.0
-    },
-    {
-        "name": "12 Angry Men",
-        "year": 1957,
-        "rating": 8.9
-    },
-    {
-        "name": "Everything Everywhere All At Once",
-        "year": 2022,
-        "rating": 9.5
-    },
-    {
-        "name": "Forrest Gump",
-        "year": 1994,
-        "rating": 8.0
-    },
-    {
-        "name": "Star Wars: Episode V",
-        "year": 1980,
-        "rating": 8.7
-    },
-    {
-        "name": "Pulp Fiction",
-        "year": 1980,
-        "rating": 8.0
+        "title": "Mickey Mouse",
+        "year": 0,
+        "rating": 8.1,
+        "poster": "https://m.media-amazon.com/images/M/MV5BNTlmMTZlMzgtNzBiZi00YzJkLWFmODItNDc4MGExZGI0OTZmXkEyXkFqcGc@._V1_SX300.jpg"
     }
 ]
