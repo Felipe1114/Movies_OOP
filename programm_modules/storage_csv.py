@@ -32,7 +32,7 @@ class StorageCSV(istorage.IStorage):
     new_movie = {
       "title": api_response.get("title"),
       "year": api_response.get("year"),
-      "rating": api_response.get("rating"),  # Verwenden des IMDb-Ratings
+      "rating": api_response.get("rating"),
       "poster": api_response.get("poster")
     }
 
@@ -114,12 +114,7 @@ class StorageCSV(istorage.IStorage):
 
 
   def get_movies_by_rating(self, rating_type: int):
-    """ sorted_movies = self.sort_movies()
-     if rating_type in {0, -1}:
-         reference_rating = sorted_movies[rating_type]['rating']
-         return [movie for movie in sorted_movies if movie['rating'] == reference_rating]
-     return []
-     """
+    """sorts all movies, by their rating"""
     sorted_movie_list = self.sort_movies(self.key_for_rating)
     s_m_l = sorted_movie_list
 
@@ -136,6 +131,7 @@ class StorageCSV(istorage.IStorage):
 
 
   def _find_movie_index(self, title):
+    """Not used, but necessary cause Parent Class IStorage"""
     pass
 
   def find_dict_by_name(self, title):

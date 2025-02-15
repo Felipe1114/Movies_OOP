@@ -1,5 +1,3 @@
-from types import NoneType
-
 import requests
 
 class OmdbApi:
@@ -26,7 +24,7 @@ class OmdbApi:
       if response.status_code == 200:
         data = response.json()
 
-        # Wenn der Film gefunden wird
+        # if the movie is found
         if data.get("Response") == "True":
           return {
             "title": data.get("Title"),
@@ -52,12 +50,12 @@ class OmdbApi:
 
     required_keys = {"title": str, "year": int, "rating": float, "poster": str}
 
-    # Prüfen, ob `new_movie` überhaupt ein Dictionary ist
+    # checks if movie is a dictionary
     if not isinstance(new_movie, dict):
       print("Error: Provided movie is not a dictionary.")
       return None
 
-    # Sicherstellen, dass alle Keys existieren
+    # checks, that all keys existing, if not sets default value
     for key in required_keys:
       if key not in new_movie:
         print(f"Warning: Missing key '{key}'. Setting default value.")
@@ -70,7 +68,7 @@ class OmdbApi:
         else:
           new_movie[key] = "unknown"
 
-    # Werte validieren und ggf. konvertieren
+    # validates data and converts it, if necesarry
     if not isinstance(new_movie["title"], str):
       new_movie["title"] = "unknown title"
       print("Title was not a string. Changed to 'unknown title'.")
