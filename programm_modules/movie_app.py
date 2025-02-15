@@ -6,14 +6,19 @@ from programm_modules.storage_csv import StorageCSV
 
 
 class MovieApp:
-  def __init__(self, omdbapi, file_path, storage_type='json'):
+  def __init__(self, omdbapi, file_path, web_generator, storage_type='json'):
     self._omdbapi = omdbapi
     self.file_path = file_path
+    self.web_generator = web_generator
     if storage_type:
       if storage_type == 'json':
         self._storage = StorageJson(self.file_path)
       if storage_type == 'csv':
         self._storage = StorageCSV(self.file_path)
+
+    # gives the MovieWebsiteGenerator class the storage parameter
+    print(f"Defining storage as storage as {self._storage} to {self.web_generator}")
+    self.web_generator.define_storage(self._storage)
 
     self._operations = {
     0: exit,  # ("bye")
@@ -26,7 +31,8 @@ class MovieApp:
     7: self.search_movie,
     8: self.sort_movies_by_rating,
     9: self.sort_movies_by_year,
-    10: self.filter_movies
+    10: self.filter_movies,
+    11: self.generate_website
   }
 
 
@@ -122,9 +128,9 @@ class MovieApp:
     return text
 
 
-  def _generate_website(self):
+  def generate_website(self):
     '''Gets movie data form self.storage, generates movie-HTML dokument'''
-    pass
+    self.web_generator.generate_html()
 
 
   def search_movie(self):
@@ -270,5 +276,6 @@ class MovieApp:
 
       except ValueError as e:
         print(e)
+
 
 
